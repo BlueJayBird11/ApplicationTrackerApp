@@ -1,5 +1,9 @@
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddEnvironmentVariables();
+
+var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
+
 // Add services to the container.
 
 builder.Services.AddControllers();
