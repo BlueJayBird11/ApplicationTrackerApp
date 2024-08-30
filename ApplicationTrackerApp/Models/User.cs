@@ -14,9 +14,7 @@ namespace ApplicationTrackerApp.Models
         public string PasswordHash { get; set; }
         [Required]
         public DateTime SignUpDate { get; set; }
-        [Required]
-        public bool IsEmailConfirmed { get; set; }
         public DateTime MembershipExpirationDate { get; set; }
-        public virtual ICollection<Application> Applications { get; set; }
+        public virtual ICollection<JobApplication> Applications { get; set; }
     }
 }

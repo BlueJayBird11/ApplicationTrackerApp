@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ApplicationTrackerApp.Models
+namespace ApplicationTrackerApp.Dto
 {
-    public class Application
+    public class JobApplicationDto
     {
         [Required]
         public int Id { get; set; }
@@ -31,8 +31,5 @@ namespace ApplicationTrackerApp.Models
         [Required]
         public DateOnly DateApplied { get; set; }
         public DateOnly DateClosed { get; set; }
-        public virtual User User { get; set; }
-        public virtual JobType JobType { get; set; }
-        public virtual ClosedReason ClosedReason { get; set; }
     }
 }

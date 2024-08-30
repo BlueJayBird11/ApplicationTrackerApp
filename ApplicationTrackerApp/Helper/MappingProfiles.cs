@@ -8,8 +8,8 @@ namespace ApplicationTrackerApp.Helper
     {
         public MappingProfiles() 
         {
-            CreateMap<Application, ApplicationDto>();
-            CreateMap<ApplicationDto, Application>();
+            CreateMap<JobApplication, JobApplicationDto>();
+            CreateMap<JobApplicationDto, JobApplication>();
             CreateMap<ClosedReason, ClosedReasonDto>();
             CreateMap<ClosedReasonDto, ClosedReason>();
             CreateMap<JobType, JobTypeDto>();

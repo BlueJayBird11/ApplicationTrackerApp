@@ -8,6 +8,6 @@ namespace ApplicationTrackerApp.Models
         [Required]
         [StringLength(64)]
         public string Name { get; set; }
-        public virtual ICollection<Application> Applications { get; set; }
+        public virtual ICollection<JobApplication> Applications { get; set; }
     }
 }
