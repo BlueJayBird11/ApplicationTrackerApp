@@ -25,7 +25,6 @@
     <Folder Include="Controllers\" />
     <Folder Include="Interface\" />
     <Folder Include="Helper\" />
-    <Folder Include="Dto\" />
     <Folder Include="Data\" />
     <Folder Include="Repository\" />
   </ItemGroup>

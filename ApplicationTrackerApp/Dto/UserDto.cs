@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ApplicationTrackerApp.Models
+namespace ApplicationTrackerApp.Dto
 {
-    public class User
+    public class UserDto
     {
         public int Id { get; set; }
         [Required]
@@ -17,6 +17,5 @@ namespace ApplicationTrackerApp.Models
         [Required]
         public bool IsEmailConfirmed { get; set; }
         public DateTime MembershipExpirationDate { get; set; }
-        public virtual ICollection<Application> Applications { get; set; }
     }
 }
