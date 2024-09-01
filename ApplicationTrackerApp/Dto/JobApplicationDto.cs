@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ApplicationTrackerApp.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace ApplicationTrackerApp.Dto
 {

@@ -9,10 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
 
-// var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -21,6 +17,7 @@ builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IClosedReasonRepository, ClosedReasonRepository>();
+builder.Services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
