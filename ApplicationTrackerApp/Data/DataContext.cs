@@ -10,7 +10,7 @@ namespace ApplicationTrackerApp.Data
             
         }
 
-        public DbSet<JobApplication> Applications { get; set; }
+        public DbSet<JobApplication> JobApplications { get; set; }
         public DbSet<ClosedReason> ClosedReasons { get; set; }
         public DbSet<JobType> JobTypes { get; set; }
         public DbSet<User> Users { get; set; }

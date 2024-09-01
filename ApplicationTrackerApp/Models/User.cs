@@ -8,13 +8,13 @@ namespace ApplicationTrackerApp.Models
         [Required]
         [StringLength(128)]
         [EmailAddress]
-        public string Email { get; set; }
+        public required string Email { get; set; }
         [Required]
-        [StringLength(256)]
-        public string PasswordHash { get; set; }
+        [StringLength(512)]
+        public required string PasswordHash { get; set; }
         [Required]
-        public DateTime SignUpDate { get; set; }
-        public DateTime MembershipExpirationDate { get; set; }
-        public virtual ICollection<JobApplication> Applications { get; set; }
+        public required DateTime SignUpDate { get; set; }
+        public DateTime? MembershipExpirationDate { get; set; }
+        public virtual ICollection<JobApplication>? Applications { get; set; }
     }
 }

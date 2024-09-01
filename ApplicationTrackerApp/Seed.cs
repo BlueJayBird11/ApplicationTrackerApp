@@ -50,7 +50,7 @@ namespace ApplicationTrackerApp
             // 'Full-Time' | 'Part-Time' | 'Internship' | 'Contract' | ''
             if (!dataContext.JobTypes.Any())
             {
-                var jobType = new List<JobType>()
+                var jobTypes = new List<JobType>()
                 {
                     new JobType()
                     {
@@ -89,6 +89,8 @@ namespace ApplicationTrackerApp
                         Name = "Apprenticeship"
                     }
                 };
+                dataContext.JobTypes.AddRange(jobTypes);
+                dataContext.SaveChanges();
             }
 
             if (!dataContext.Users.Any())
@@ -104,11 +106,20 @@ namespace ApplicationTrackerApp
                         {
                             new JobApplication()
                             {
-
+                                Company = "Microsoft",
+                                Position = "Software Developer",
+                                Location = "Redmond, WA",
+                                MinPay = "80k/yr",
+                                MaxPay = "120k/yr",
+                                Description = "ASP.NET Core Developer, C#, both server and client side",
+                                JobType = dataContext.JobTypes.Where(j => j.Name == "Full-Time").FirstOrDefault(),
                             }
                         }
                     }
                 };
+
+                dataContext.Users.AddRange(users);
+                dataContext.SaveChanges();
             }
         }
     }
