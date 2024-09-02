@@ -2,6 +2,7 @@
 using ApplicationTrackerApp.Interface;
 using ApplicationTrackerApp.Models;
 using ApplicationTrackerApp.Repository;
+using ApplicationTrackerApp.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +13,13 @@ namespace ApplicationTrackerApp.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
+        private readonly UserService _userService;
         private readonly IMapper _mapper;
 
-        public UserController(IUserRepository userRepository, IMapper mapper)
+        public UserController(IUserRepository userRepository, UserService userService, IMapper mapper)
         {
             this._userRepository = userRepository;
+            this._userService = userService;
             this._mapper = mapper;
         }
 
