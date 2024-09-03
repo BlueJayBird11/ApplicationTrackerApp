@@ -50,5 +50,17 @@ namespace ApplicationTrackerApp.Controllers
 
             return Ok(user);
         }
+
+        [HttpGet("{userId}/applications")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<JobApplication>))]
+        public IActionResult GetUserJobApplications(int userId)
+        {
+            var jobApplications = _userRepository.GetUsersJobApplications(userId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(jobApplications);
+        }
     }
 }

@@ -47,5 +47,37 @@ namespace ApplicationTrackerApp.Controllers
 
             return Ok(jobApplication);
         }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateApplication([FromQuery] int userId, [FromQuery] int jobTypeId, [FromQuery] int closedReasonId, [FromBody] JobApplicationDto jobApplicationCreate)
+        {
+            if (jobApplicationCreate == null)
+                return BadRequest(ModelState);
+
+            var jobApplication = _jobApplicationRepository.GetJobApplications()
+                .Where(j => j.Id == jobApplicationCreate.Id)
+                .FirstOrDefault();
+
+            if (jobApplication != null)
+            {
+                ModelState.AddModelError("", "Job Application with that id already exists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var jobApplicationMap = _mapper.Map<JobApplication>(jobApplicationCreate);
+
+            if (!_jobApplicationRepository.CreateJobApplication(jobApplicationMap, userId, jobTypeId, closedReasonId))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
+        }
     }
 }

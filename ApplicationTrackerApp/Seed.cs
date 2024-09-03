@@ -101,7 +101,7 @@ namespace ApplicationTrackerApp
                     {
                         Email = "bluejay.test@gmail.com",
                         PasswordHash = "AppTrack",
-                        SignUpDate = DateTime.Now,
+                        SignUpDate = new DateTime(2001, 5, 12),
                         Applications = new List<JobApplication>()
                         {
                             new JobApplication()

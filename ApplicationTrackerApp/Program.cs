@@ -2,6 +2,7 @@ using ApplicationTrackerApp;
 using ApplicationTrackerApp.Data;
 using ApplicationTrackerApp.Interface;
 using ApplicationTrackerApp.Repository;
+using ApplicationTrackerApp.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -16,6 +17,7 @@ builder.Services.AddTransient<Seed>();
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IClosedReasonRepository, ClosedReasonRepository>();
 builder.Services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
 builder.Services.AddScoped<IJobTypeRepository, JobTypeRepository>();

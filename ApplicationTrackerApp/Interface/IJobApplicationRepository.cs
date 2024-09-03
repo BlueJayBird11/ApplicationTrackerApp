@@ -7,6 +7,8 @@ namespace ApplicationTrackerApp.Interface
         ICollection<JobApplication> GetJobApplications();
         JobApplication GetJobApplication(int id);
         bool JobApplicationExists(int id);
+        bool CreateJobApplication(JobApplication jobApplication, int userId, int jobTypeId, int closedReasonId);
+        bool UpdateJobApplication(JobApplication jobApplication, int jobTypeId, int closedReasonId);
         bool Save();
     }
 }
