@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace ApplicationTrackerApp.Models
 {
     public class User
     {
+        [Key]
         public int Id { get; set; }
         [Required]
         [StringLength(128)]

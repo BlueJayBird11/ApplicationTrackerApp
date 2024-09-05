@@ -4,6 +4,7 @@ namespace ApplicationTrackerApp.Models
 {
     public class Login
     {
+        [Key]
         public int Id { get; set; }
         [StringLength(128)]
         public string SessionKey { get; set; }

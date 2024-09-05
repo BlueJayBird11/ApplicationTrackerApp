@@ -4,6 +4,7 @@ namespace ApplicationTrackerApp.Models
 {
     public class ClosedReason
     {
+        [Key]
         public int Id { get; set; }
         [Required]
         [StringLength(64)]

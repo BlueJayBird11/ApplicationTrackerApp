@@ -16,12 +16,18 @@ namespace ApplicationTrackerApp.Repository
 
         public bool CreateUser(User user)
         {
-            throw new NotImplementedException();
+            _context.Add(user);
+            return Save();
         }
 
         public User GetUser(int id)
         {
             return _context.Users.Where(u => u.Id == id).FirstOrDefault();
+        }
+
+        public User GetUserByEmail(string email)
+        {
+            return _context.Users.Where(u => u.Email == email).FirstOrDefault();
         }
 
         public ICollection<User> GetUsers()
@@ -42,7 +48,8 @@ namespace ApplicationTrackerApp.Repository
 
         public bool UpdateUser(User user)
         {
-            throw new NotImplementedException();
+            _context.Update(user);
+            return Save();
         }
 
         public bool UserExists(int id)

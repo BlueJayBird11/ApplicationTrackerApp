@@ -4,6 +4,7 @@ namespace ApplicationTrackerApp.Models
 {
     public class JobApplication
     {
+        [Key]
         public int Id { get; set; }
         [Required]
         [StringLength(100)]

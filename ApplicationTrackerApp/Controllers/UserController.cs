@@ -13,12 +13,14 @@ namespace ApplicationTrackerApp.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
+        private readonly ILoginRepository _loginRepository;
         private readonly UserService _userService;
         private readonly IMapper _mapper;
 
-        public UserController(IUserRepository userRepository, UserService userService, IMapper mapper)
+        public UserController(IUserRepository userRepository, ILoginRepository loginRepository, UserService userService, IMapper mapper)
         {
             this._userRepository = userRepository;
+            this._loginRepository = loginRepository;
             this._userService = userService;
             this._mapper = mapper;
         }
@@ -62,5 +64,7 @@ namespace ApplicationTrackerApp.Controllers
 
             return Ok(jobApplications);
         }
+
+
     }
 }
