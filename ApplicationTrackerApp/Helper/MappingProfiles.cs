@@ -16,6 +16,8 @@ namespace ApplicationTrackerApp.Helper
             CreateMap<JobTypeDto, JobType>();
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
+            CreateMap<User, CreateUserDto>();
+            CreateMap<CreateUserDto, User>();
         }
     }
 }
