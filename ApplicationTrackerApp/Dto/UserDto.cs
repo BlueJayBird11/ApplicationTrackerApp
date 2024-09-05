@@ -7,7 +7,6 @@ namespace ApplicationTrackerApp.Dto
         public int Id { get; set; }
         public string Email { get; set; }
         // public string PasswordHash { get; set; }
-        public DateTime SignUpDate { get; set; }
         public bool IsEmailConfirmed { get; set; }
         public DateTime MembershipExpirationDate { get; set; }
     }

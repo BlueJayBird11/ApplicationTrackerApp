@@ -2,23 +2,19 @@
 
 namespace ApplicationTrackerApp.Models
 {
-    public class User
+    public class Login
     {
         public int Id { get; set; }
-        [Required]
         [StringLength(128)]
-        [EmailAddress]
-        public required string Email { get; set; }
+        public string SessionKey { get; set; }
         [Required]
-        [StringLength(512)]
-        public string PasswordHash { get; set; }
-        public DateTime? MembershipExpirationDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        [Required]
         public DateTime ModifiedDate { get; set; }
-        public virtual ICollection<JobApplication>? Applications { get; set; }
-        public virtual Login Login { get; set; }
+        public DateTime LastLoginDate { get; set; }
+        public virtual User User { get; set; }
 
-        public User()
+        public Login()
         {
             this.CreatedDate = DateTime.UtcNow;
             this.ModifiedDate = DateTime.UtcNow;

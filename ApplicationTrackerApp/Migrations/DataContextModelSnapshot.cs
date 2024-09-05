@@ -56,6 +56,9 @@ namespace ApplicationTrackerApp.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateOnly>("DateApplied")
                         .HasColumnType("date");
 
@@ -71,10 +74,12 @@ namespace ApplicationTrackerApp.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LinkToCompanySite")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("LinkToJobPost")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -90,6 +95,9 @@ namespace ApplicationTrackerApp.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Position")
                         .IsRequired()
@@ -128,6 +136,30 @@ namespace ApplicationTrackerApp.Migrations
                     b.ToTable("JobTypes");
                 });
 
+            modelBuilder.Entity("ApplicationTrackerApp.Models.Login", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastLoginDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SessionKey")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Logins");
+                });
+
             modelBuilder.Entity("ApplicationTrackerApp.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -135,6 +167,9 @@ namespace ApplicationTrackerApp.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -144,13 +179,13 @@ namespace ApplicationTrackerApp.Migrations
                     b.Property<DateTime?>("MembershipExpirationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
-
-                    b.Property<DateTime>("SignUpDate")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -180,6 +215,17 @@ namespace ApplicationTrackerApp.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ApplicationTrackerApp.Models.Login", b =>
+                {
+                    b.HasOne("ApplicationTrackerApp.Models.User", "User")
+                        .WithOne("Login")
+                        .HasForeignKey("ApplicationTrackerApp.Models.Login", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ApplicationTrackerApp.Models.ClosedReason", b =>
                 {
                     b.Navigation("Applications");
@@ -193,6 +239,9 @@ namespace ApplicationTrackerApp.Migrations
             modelBuilder.Entity("ApplicationTrackerApp.Models.User", b =>
                 {
                     b.Navigation("Applications");
+
+                    b.Navigation("Login")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

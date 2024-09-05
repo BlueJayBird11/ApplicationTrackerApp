@@ -45,8 +45,9 @@ namespace ApplicationTrackerApp.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Email = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
-                    SignUpDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MembershipExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    MembershipExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,11 +65,13 @@ namespace ApplicationTrackerApp.Migrations
                     Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     MinPay = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     MaxPay = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    LinkToCompanySite = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LinkToJobPost = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LinkToCompanySite = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    LinkToJobPost = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
                     Description = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
                     DateApplied = table.Column<DateOnly>(type: "date", nullable: false),
                     DateClosed = table.Column<DateOnly>(type: "date", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true),
                     JobTypeId = table.Column<int>(type: "int", nullable: false),
                     ClosedReasonId = table.Column<int>(type: "int", nullable: true)
@@ -94,6 +97,27 @@ namespace ApplicationTrackerApp.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Logins",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    SessionKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Logins", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Logins_Users_Id",
+                        column: x => x.Id,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_JobApplications_ClosedReasonId",
                 table: "JobApplications",
@@ -115,6 +139,9 @@ namespace ApplicationTrackerApp.Migrations
         {
             migrationBuilder.DropTable(
                 name: "JobApplications");
+
+            migrationBuilder.DropTable(
+                name: "Logins");
 
             migrationBuilder.DropTable(
                 name: "ClosedReasons");

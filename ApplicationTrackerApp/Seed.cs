@@ -1,14 +1,17 @@
 ﻿using ApplicationTrackerApp.Data;
 using ApplicationTrackerApp.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace ApplicationTrackerApp
 {
     public class Seed
     {
         private readonly DataContext dataContext;
+        private readonly PasswordHasher<User> _passwordHasher;
         public Seed(DataContext context)
         {
             this.dataContext = context;
+            _passwordHasher = new PasswordHasher<User>();
         }
 
         public void SeedDataContext()
@@ -95,30 +98,27 @@ namespace ApplicationTrackerApp
 
             if (!dataContext.Users.Any())
             {
-                var users = new List<User>()
+                var user = new User()
                 {
-                    new User()
+                    Email = "bluejay.test@gmail.com",
+                    Applications = new List<JobApplication>()
                     {
-                        Email = "bluejay.test@gmail.com",
-                        PasswordHash = "AppTrack",
-                        SignUpDate = new DateTime(2001, 5, 12),
-                        Applications = new List<JobApplication>()
+                        new JobApplication()
                         {
-                            new JobApplication()
-                            {
-                                Company = "Microsoft",
-                                Position = "Software Developer",
-                                Location = "Redmond, WA",
-                                MinPay = "80k/yr",
-                                MaxPay = "120k/yr",
-                                Description = "ASP.NET Core Developer, C#, both server and client side",
-                                JobType = dataContext.JobTypes.Where(j => j.Name == "Full-Time").FirstOrDefault(),
-                            }
+                            Company = "Microsoft",
+                            Position = "Software Developer",
+                            Location = "Redmond, WA",
+                            MinPay = "80k/yr",
+                            MaxPay = "120k/yr",
+                            Description = "ASP.NET Core Developer, C#, both server and client side",
+                            JobType = dataContext.JobTypes.Where(j => j.Name == "Full-Time").FirstOrDefault(),
                         }
-                    }
+                    }                    
                 };
 
-                dataContext.Users.AddRange(users);
+                user.PasswordHash = _passwordHasher.HashPassword(user, "AppTrack");
+
+                dataContext.Users.Add(user);
                 dataContext.SaveChanges();
             }
         }
