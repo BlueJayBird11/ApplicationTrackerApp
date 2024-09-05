@@ -121,6 +121,19 @@ namespace ApplicationTrackerApp
                 dataContext.Users.Add(user);
                 dataContext.SaveChanges();
             }
+
+            if (!dataContext.Logins.Any())
+            {
+                var login = new Login()
+                {
+                    LastLoginDate = DateTime.UtcNow,
+                    SessionKey = "124567890",
+                    User = dataContext.Users.Where(u => u.Email == "bluejay.test@gmail.com").FirstOrDefault()
+                };
+
+                dataContext.Logins.Add(login);
+                dataContext.SaveChanges();
+            }
         }
     }
 }
