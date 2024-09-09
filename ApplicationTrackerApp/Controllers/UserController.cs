@@ -97,5 +97,38 @@ namespace ApplicationTrackerApp.Controllers
 
             return Ok("Successfully created");
         }
+
+        [HttpGet("login")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult LoginUser([FromQuery] string email, [FromQuery] string password)
+        {
+            if (email == null || password == null)
+                return BadRequest(ModelState);
+
+            var user = _userRepository.GetUserByEmail(email);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_userService.ValidateUser(user, password))
+            {
+                ModelState.AddModelError("", "Incorrect Password");
+                return StatusCode(401, ModelState);
+            }
+
+            var userInfo = new
+            {
+                Id = user.Id,
+            };
+
+            return Ok(userInfo);
+        }
     }
 }
