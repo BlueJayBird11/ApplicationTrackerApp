@@ -13,6 +13,32 @@ namespace ApplicationTrackerApp.Repository
             this._context = context;
         }
 
+        public string GenerateNewSessionKey(int userId)
+        {
+            // needs testing
+            string sessionKey = Guid.NewGuid().ToString();
+            var login = _context.Logins.Where(l => l.User.Id == userId).FirstOrDefault();
+
+            if (login == null)
+            {
+                var newLogin = new Login()
+                {
+                    LastLoginDate = DateTime.UtcNow,
+                    SessionKey = sessionKey,
+                };
+
+                _context.Logins.Add(newLogin);
+                Save();
+            }
+            else
+            {
+                login.SessionKey = sessionKey;
+                _context.Logins.Update(login);
+                Save();
+            }
+            return sessionKey;
+        }
+
         public Login GetLogin(int id)
         {
             return _context.Logins.Where(l => l.Id == id).FirstOrDefault();

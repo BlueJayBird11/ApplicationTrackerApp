@@ -123,9 +123,12 @@ namespace ApplicationTrackerApp.Controllers
                 return StatusCode(401, ModelState);
             }
 
+            string sessionKey = _loginRepository.GenerateNewSessionKey(user.Id);
+
             var userInfo = new
             {
-                Id = user.Id,
+                UserId = user.Id,
+                SessionKey = sessionKey,
             };
 
             return Ok(userInfo);
