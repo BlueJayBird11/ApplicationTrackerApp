@@ -33,6 +33,8 @@ namespace ApplicationTrackerApp.Repository
             else
             {
                 login.SessionKey = sessionKey;
+                login.LastLoginDate = DateTime.UtcNow;
+                login.ModifiedDate = DateTime.UtcNow;
                 _context.Logins.Update(login);
                 Save();
             }
