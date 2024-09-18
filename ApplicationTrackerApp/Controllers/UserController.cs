@@ -5,6 +5,7 @@ using ApplicationTrackerApp.Repository;
 using ApplicationTrackerApp.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace ApplicationTrackerApp.Controllers
 {
@@ -57,7 +58,7 @@ namespace ApplicationTrackerApp.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<JobApplication>))]
         public IActionResult GetUserJobApplications(int userId)
         {
-            var jobApplications = _userRepository.GetUsersJobApplications(userId);
+            var jobApplications = _mapper.Map<List<JobApplicationFullDto>>(_userRepository.GetUsersJobApplications(userId));
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

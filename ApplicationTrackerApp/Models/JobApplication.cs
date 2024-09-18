@@ -32,7 +32,7 @@ namespace ApplicationTrackerApp.Models
         public required string Description { get; set; }
         [Required]
         public DateOnly DateApplied { get; set; }
-        public DateOnly DateClosed { get; set; }
+        public DateOnly? DateClosed { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public virtual User? User { get; set; }

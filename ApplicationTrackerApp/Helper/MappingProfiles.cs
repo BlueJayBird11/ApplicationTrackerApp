@@ -10,6 +10,8 @@ namespace ApplicationTrackerApp.Helper
         {
             CreateMap<JobApplication, JobApplicationDto>();
             CreateMap<JobApplicationDto, JobApplication>();
+            CreateMap<JobApplication, JobApplicationFullDto>();
+            CreateMap<JobApplicationFullDto, JobApplication>();
             CreateMap<ClosedReason, ClosedReasonDto>();
             CreateMap<ClosedReasonDto, ClosedReason>();
             CreateMap<JobType, JobTypeDto>();

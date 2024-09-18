@@ -62,7 +62,7 @@ namespace ApplicationTrackerApp.Migrations
                     b.Property<DateOnly>("DateApplied")
                         .HasColumnType("date");
 
-                    b.Property<DateOnly>("DateClosed")
+                    b.Property<DateOnly?>("DateClosed")
                         .HasColumnType("date");
 
                     b.Property<string>("Description")

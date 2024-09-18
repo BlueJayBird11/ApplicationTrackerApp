@@ -44,6 +44,10 @@ namespace ApplicationTrackerApp
                     new ClosedReason()
                     {
                         Name = "Accepted"
+                    },
+                    new ClosedReason()
+                    {
+                        Name = "No reason given"
                     }
                 };
                 dataContext.ClosedReasons.AddRange(closedReasons);
@@ -122,6 +126,7 @@ namespace ApplicationTrackerApp
                 dataContext.SaveChanges();
             }
 
+            /*
             if (!dataContext.Logins.Any())
             {
                 var login = new Login()
@@ -133,7 +138,7 @@ namespace ApplicationTrackerApp
 
                 dataContext.Logins.Add(login);
                 dataContext.SaveChanges();
-            }
+            }*/
         }
     }
 }

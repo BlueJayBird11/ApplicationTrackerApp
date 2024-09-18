@@ -4,6 +4,7 @@ using ApplicationTrackerApp.Models;
 using ApplicationTrackerApp.Repository;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace ApplicationTrackerApp.Controllers
 {
@@ -40,7 +41,7 @@ namespace ApplicationTrackerApp.Controllers
             if (!_jobApplicationRepository.JobApplicationExists(jobApplicationId))
                 return NotFound();
 
-            var jobApplication = _jobApplicationRepository.GetJobApplication(jobApplicationId);
+            var jobApplication = _mapper.Map<JobApplicationFullDto>(_jobApplicationRepository.GetJobApplication(jobApplicationId));
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -56,6 +57,12 @@ namespace ApplicationTrackerApp.Controllers
             if (jobApplicationCreate == null)
                 return BadRequest(ModelState);
 
+            if (jobTypeId == 0)
+            {
+                ModelState.AddModelError("", "Job Application requires a job type");
+                return StatusCode(422, ModelState);
+            }
+
             var jobApplication = _jobApplicationRepository.GetJobApplications()
                 .Where(j => j.Id == jobApplicationCreate.Id)
                 .FirstOrDefault();
@@ -69,7 +76,21 @@ namespace ApplicationTrackerApp.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            if (jobApplicationCreate.LinkToCompanySite == "")
+                jobApplicationCreate.LinkToCompanySite = null;
+
             var jobApplicationMap = _mapper.Map<JobApplication>(jobApplicationCreate);
+
+            if (jobApplicationMap.LinkToCompanySite == "")
+                jobApplicationMap.LinkToCompanySite = null;
+
+            if (jobApplicationMap.LinkToJobPost == "")
+                jobApplicationMap.LinkToJobPost = null;
+
+            /* // DateClosed doesn't allow nulls?
+            if (jobApplicationMap.DateClosed == new DateOnly(0001, 01, 01))
+                jobApplicationMap.DateClosed = null;
+            */
 
             if (!_jobApplicationRepository.CreateJobApplication(jobApplicationMap, userId, jobTypeId, closedReasonId))
             {

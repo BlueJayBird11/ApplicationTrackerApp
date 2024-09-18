@@ -69,7 +69,7 @@ namespace ApplicationTrackerApp.Migrations
                     LinkToJobPost = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
                     Description = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
                     DateApplied = table.Column<DateOnly>(type: "date", nullable: false),
-                    DateClosed = table.Column<DateOnly>(type: "date", nullable: false),
+                    DateClosed = table.Column<DateOnly>(type: "date", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true),

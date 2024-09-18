@@ -1,16 +1,19 @@
 ﻿using ApplicationTrackerApp.Data;
 using ApplicationTrackerApp.Interface;
 using ApplicationTrackerApp.Models;
+using ApplicationTrackerApp.Services;
 
 namespace ApplicationTrackerApp.Repository
 {
     public class LoginRepository : ILoginRepository
     {
         private readonly DataContext _context;
+        private readonly UserService _userService;
 
-        public LoginRepository(DataContext context)
+        public LoginRepository(DataContext context, UserService userService)
         {
             this._context = context;
+            this._userService = userService;
         }
 
         public string GenerateNewSessionKey(int userId)
@@ -23,18 +26,22 @@ namespace ApplicationTrackerApp.Repository
             {
                 var newLogin = new Login()
                 {
+                    Id = userId,
                     LastLoginDate = DateTime.UtcNow,
                     SessionKey = sessionKey,
                 };
 
+                _userService.HashSessionKey(newLogin, sessionKey);
                 _context.Logins.Add(newLogin);
                 Save();
             }
             else
             {
+                
                 login.SessionKey = sessionKey;
                 login.LastLoginDate = DateTime.UtcNow;
                 login.ModifiedDate = DateTime.UtcNow;
+                _userService.HashSessionKey(login, sessionKey);
                 _context.Logins.Update(login);
                 Save();
             }

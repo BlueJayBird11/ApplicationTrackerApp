@@ -1,6 +1,7 @@
 ﻿using ApplicationTrackerApp.Data;
 using ApplicationTrackerApp.Interface;
 using ApplicationTrackerApp.Models;
+using ApplicationTrackerApp.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationTrackerApp.Repository

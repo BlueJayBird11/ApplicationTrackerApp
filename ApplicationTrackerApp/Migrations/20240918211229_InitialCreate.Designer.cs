@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApplicationTrackerApp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240905182110_InitialCreate")]
+    [Migration("20240918211229_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -65,7 +65,7 @@ namespace ApplicationTrackerApp.Migrations
                     b.Property<DateOnly>("DateApplied")
                         .HasColumnType("date");
 
-                    b.Property<DateOnly>("DateClosed")
+                    b.Property<DateOnly?>("DateClosed")
                         .HasColumnType("date");
 
                     b.Property<string>("Description")
