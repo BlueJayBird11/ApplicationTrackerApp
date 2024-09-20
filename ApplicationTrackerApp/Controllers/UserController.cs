@@ -28,7 +28,7 @@ namespace ApplicationTrackerApp.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
-        public IActionResult GetUsers()
+        public IActionResult GetUsers([FromQuery] string adminPassword)
         {
             var users = _mapper.Map<List<UserDto>>(_userRepository.GetUsers());
 
@@ -56,8 +56,27 @@ namespace ApplicationTrackerApp.Controllers
 
         [HttpGet("{userId}/applications")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<JobApplication>))]
-        public IActionResult GetUserJobApplications(int userId)
+        public IActionResult GetUserJobApplications(int userId, [FromQuery] string sessionKey)
         {
+            var login = _loginRepository.GetUserLogin(userId);
+
+            if (login == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_userService.ValidateSessionKey(login, sessionKey))
+            {
+                ModelState.AddModelError("", "Invalid Session Key");
+                return StatusCode(401, ModelState);
+            }
+
+            if (_loginRepository.SessionExpired(login.Id))
+            {
+                ModelState.AddModelError("", "Session Expired");
+                return StatusCode(440, ModelState);
+            }
+
             var jobApplications = _mapper.Map<List<JobApplicationFullDto>>(_userRepository.GetUsersJobApplications(userId));
 
             if (!ModelState.IsValid)

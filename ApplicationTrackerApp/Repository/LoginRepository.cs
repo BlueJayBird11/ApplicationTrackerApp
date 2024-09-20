@@ -58,6 +58,11 @@ namespace ApplicationTrackerApp.Repository
             return _context.Logins.ToList();
         }
 
+        public Login GetUserLogin(int userId)
+        {
+            return _context.Logins.Where(l => l.User.Id == userId).FirstOrDefault();
+        }
+
         public bool LoginExists(int id)
         {
             return _context.Logins.Any(l => l.Id == id);

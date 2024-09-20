@@ -2,6 +2,7 @@
 using ApplicationTrackerApp.Interface;
 using ApplicationTrackerApp.Models;
 using ApplicationTrackerApp.Repository;
+using ApplicationTrackerApp.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -13,12 +14,16 @@ namespace ApplicationTrackerApp.Controllers
     public class JobApplicationController : Controller
     {
         private readonly IJobApplicationRepository _jobApplicationRepository;
+        private readonly ILoginRepository _loginRepository;
         private readonly IMapper _mapper;
+        private readonly UserService _userService;
 
-        public JobApplicationController(IJobApplicationRepository jobApplicationRepository, IMapper mapper)
+        public JobApplicationController(IJobApplicationRepository jobApplicationRepository, ILoginRepository loginRepository, IMapper mapper, UserService userService)
         {
             this._jobApplicationRepository = jobApplicationRepository;
+            this._loginRepository = loginRepository;
             this._mapper = mapper;
+            this._userService = userService;
         }
 
         [HttpGet]
@@ -52,8 +57,27 @@ namespace ApplicationTrackerApp.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateApplication([FromQuery] int userId, [FromQuery] int jobTypeId, [FromQuery] int closedReasonId, [FromBody] JobApplicationDto jobApplicationCreate)
+        public IActionResult CreateApplication([FromQuery] int userId, [FromQuery] int jobTypeId, [FromQuery] int closedReasonId, [FromQuery] string sessionKey, [FromBody] JobApplicationDto jobApplicationCreate)
         {
+            var login = _loginRepository.GetUserLogin(userId);
+
+            if (login == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_userService.ValidateSessionKey(login, sessionKey))
+            {
+                ModelState.AddModelError("", "Invalid Session Key");
+                return StatusCode(401, ModelState);
+            }
+
+            if (_loginRepository.SessionExpired(login.Id))
+            {
+                ModelState.AddModelError("", "Session Expired");
+                return StatusCode(440, ModelState);
+            }
+            
             if (jobApplicationCreate == null)
                 return BadRequest(ModelState);
 
