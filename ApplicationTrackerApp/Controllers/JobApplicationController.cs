@@ -122,10 +122,10 @@ namespace ApplicationTrackerApp.Controllers
             return Ok("Successfully created");
         }
 
-        [HttpPut("applicationId")]
+        [HttpPut("jobApplicationId")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult UpdateApplication(int applicationId, [FromQuery] int userId, [FromQuery] int jobTypeId, [FromQuery] int closedReasonId, [FromQuery] string sessionKey, [FromBody] JobApplicationDto updatedJobApplication)
+        public IActionResult UpdateApplication(int jobApplicationId, [FromQuery] int userId, [FromQuery] int jobTypeId, [FromQuery] int closedReasonId, [FromQuery] string sessionKey, [FromBody] JobApplicationDto updatedJobApplication)
         {
             var login = _loginRepository.GetUserLogin(userId);
 
@@ -149,7 +149,7 @@ namespace ApplicationTrackerApp.Controllers
             if (updatedJobApplication == null)
                 return BadRequest(ModelState);
 
-            if (applicationId != updatedJobApplication.Id)
+            if (jobApplicationId != updatedJobApplication.Id)
                 return BadRequest(ModelState);
 
             if (jobTypeId == 0)
@@ -158,7 +158,7 @@ namespace ApplicationTrackerApp.Controllers
                 return StatusCode(422, ModelState);
             }
 
-            if (!_jobApplicationRepository.JobApplicationExists(applicationId))
+            if (!_jobApplicationRepository.JobApplicationExists(jobApplicationId))
                 return NotFound();
 
             if (!ModelState.IsValid)
@@ -177,6 +177,57 @@ namespace ApplicationTrackerApp.Controllers
             {
                 ModelState.AddModelError("", "Something went wrong updating job application");
                 return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{jobApplicationId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteJobApplication(int jobApplicationId, [FromQuery] int userId, [FromQuery] string sessionKey)
+        {
+            var login = _loginRepository.GetUserLogin(userId);
+
+            if (login == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_userService.ValidateSessionKey(login, sessionKey))
+            {
+                ModelState.AddModelError("", "Invalid Session Key");
+                return StatusCode(401, ModelState);
+            }
+
+            if (_loginRepository.SessionExpired(login.Id))
+            {
+                ModelState.AddModelError("", "Session Expired");
+                return StatusCode(440, ModelState);
+            }
+
+            if (!_jobApplicationRepository.JobApplicationExists(jobApplicationId))
+            {
+                return NotFound();
+            }
+
+            var jobAppToDelete = _jobApplicationRepository.GetJobApplication(jobApplicationId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // Check to make sure the User owns this application
+
+            if (_jobApplicationRepository.GetJobApplicationsUser(jobApplicationId).Id != userId)
+            {
+                ModelState.AddModelError("", "Forbidden: Cannot delete other user's job applications");
+                return StatusCode(403, ModelState);
+            }
+
+            if (!_jobApplicationRepository.DeleteJobApplication(jobAppToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting owner");
             }
 
             return NoContent();

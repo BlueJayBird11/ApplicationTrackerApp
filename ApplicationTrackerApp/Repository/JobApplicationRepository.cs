@@ -28,6 +28,12 @@ namespace ApplicationTrackerApp.Repository
             return Save();
         }
 
+        public bool DeleteJobApplication(JobApplication jobApplication)
+        {
+            _context.Remove(jobApplication);
+            return Save();
+        }
+
         public JobApplication GetJobApplication(int id)
         {
             return _context.JobApplications.Where(j => j.Id == id).Include(j => j.JobType).Include(j => j.ClosedReason).FirstOrDefault();
@@ -36,6 +42,11 @@ namespace ApplicationTrackerApp.Repository
         public ICollection<JobApplication> GetJobApplications()
         {
             return _context.JobApplications.ToList();
+        }
+
+        public User GetJobApplicationsUser(int jobApplicationId)
+        {
+            return _context.JobApplications.Where(j => j.Id == jobApplicationId).Include(j => j.User).FirstOrDefault().User;
         }
 
         public bool JobApplicationExists(int id)
