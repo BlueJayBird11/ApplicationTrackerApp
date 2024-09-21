@@ -100,9 +100,6 @@ namespace ApplicationTrackerApp.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (jobApplicationCreate.LinkToCompanySite == "")
-                jobApplicationCreate.LinkToCompanySite = null;
-
             var jobApplicationMap = _mapper.Map<JobApplication>(jobApplicationCreate);
 
             if (jobApplicationMap.LinkToCompanySite == "")
@@ -123,6 +120,66 @@ namespace ApplicationTrackerApp.Controllers
             }
 
             return Ok("Successfully created");
+        }
+
+        [HttpPut("applicationId")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult UpdateApplication(int applicationId, [FromQuery] int userId, [FromQuery] int jobTypeId, [FromQuery] int closedReasonId, [FromQuery] string sessionKey, [FromBody] JobApplicationDto updatedJobApplication)
+        {
+            var login = _loginRepository.GetUserLogin(userId);
+
+            if (login == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_userService.ValidateSessionKey(login, sessionKey))
+            {
+                ModelState.AddModelError("", "Invalid Session Key");
+                return StatusCode(401, ModelState);
+            }
+
+            if (_loginRepository.SessionExpired(login.Id))
+            {
+                ModelState.AddModelError("", "Session Expired");
+                return StatusCode(440, ModelState);
+            }
+
+            if (updatedJobApplication == null)
+                return BadRequest(ModelState);
+
+            if (applicationId != updatedJobApplication.Id)
+                return BadRequest(ModelState);
+
+            if (jobTypeId == 0)
+            {
+                ModelState.AddModelError("", "Job Application requires a job type");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!_jobApplicationRepository.JobApplicationExists(applicationId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+
+            var jobApplicationMap = _mapper.Map<JobApplication>(updatedJobApplication);
+
+            if (jobApplicationMap.LinkToCompanySite == "")
+                jobApplicationMap.LinkToCompanySite = null;
+
+            if (jobApplicationMap.LinkToJobPost == "")
+                jobApplicationMap.LinkToJobPost = null;
+
+            if (!_jobApplicationRepository.UpdateJobApplication(jobApplicationMap, jobTypeId, closedReasonId))
+            {
+                ModelState.AddModelError("", "Something went wrong updating job application");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
         }
     }
 }

@@ -51,7 +51,14 @@ namespace ApplicationTrackerApp.Repository
 
         public bool UpdateJobApplication(JobApplication jobApplication, int jobTypeId, int closedReasonId)
         {
-            throw new NotImplementedException();
+            var jobType = _context.JobTypes.Where(j => j.Id == jobTypeId).FirstOrDefault();
+            var closedReason = _context.ClosedReasons.Where(c => c.Id == closedReasonId).FirstOrDefault();
+
+            jobApplication.JobType = jobType;
+            jobApplication.ClosedReason = closedReason;
+
+            _context.Update(jobApplication);
+            return Save();
         }
     }
 }
