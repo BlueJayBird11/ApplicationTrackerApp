@@ -227,7 +227,7 @@ namespace ApplicationTrackerApp.Controllers
 
             if (!_jobApplicationRepository.DeleteJobApplication(jobAppToDelete))
             {
-                ModelState.AddModelError("", "Something went wrong deleting owner");
+                ModelState.AddModelError("", "Something went wrong deleting job application");
             }
 
             return NoContent();
