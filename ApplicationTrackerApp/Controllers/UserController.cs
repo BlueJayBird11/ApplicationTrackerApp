@@ -115,7 +115,19 @@ namespace ApplicationTrackerApp.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Successfully created");
+            //return Ok("Successfully created");
+
+            user = _userRepository.GetUserByEmail(userCreate.Email);
+
+            string sessionKey = _loginRepository.GenerateNewSessionKey(user.Id);
+
+            var userInfo = new
+            {
+                UserId = user.Id,
+                SessionKey = sessionKey,
+            };
+
+            return Ok(userInfo);
         }
 
         [HttpGet("login")]
