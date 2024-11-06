@@ -7,6 +7,7 @@ namespace ApplicationTrackerApp.Interface
         ICollection<ClosedReason> GetClosedReasons();
         ClosedReason GetClosedReason(int id);
         bool ClosedReasonExists(int id);
+        bool FillData();
         bool Save();
     }
 }

@@ -46,5 +46,22 @@ namespace ApplicationTrackerApp.Controllers
 
             return Ok(closedReason);
         }
+
+        [HttpPost("fillData")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult FillClosedReasonData()
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if(!_closedReasonRepository.FillData())
+            {
+                ModelState.AddModelError("", "Data already exists");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok();
+        }
     }
 }

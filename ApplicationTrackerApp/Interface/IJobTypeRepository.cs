@@ -7,6 +7,7 @@ namespace ApplicationTrackerApp.Interface
         ICollection<JobType> GetJobTypes();
         JobType GetJobType(int id);
         bool JobTypeExists(int id);
+        bool FillData();
         bool Save();
     }
 }

@@ -47,5 +47,22 @@ namespace ApplicationTrackerApp.Controllers
 
             return Ok(jobType);
         }
+
+        [HttpPost("fillData")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult FillJobTypeData()
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_jobTypeRepository.FillData())
+            {
+                ModelState.AddModelError("", "Data already exists");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok();
+        }
     }
 }

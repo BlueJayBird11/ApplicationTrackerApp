@@ -16,7 +16,6 @@ namespace ApplicationTrackerApp
 
         public void SeedDataContext()
         {
-            // 'Not hiring' | 'Position already filled' | 'Looking for other people' | 'Declined by self' | 'Interview' | 'Accepted'
             if (!dataContext.ClosedReasons.Any())
             {
                 var closedReasons = new List<ClosedReason>()
@@ -48,6 +47,10 @@ namespace ApplicationTrackerApp
                     new ClosedReason()
                     {
                         Name = "No reason given"
+                    },
+                    new ClosedReason()
+                    {
+                        Name = "Offer"
                     }
                 };
                 dataContext.ClosedReasons.AddRange(closedReasons);
@@ -125,20 +128,6 @@ namespace ApplicationTrackerApp
                 dataContext.Users.Add(user);
                 dataContext.SaveChanges();
             }
-
-            /*
-            if (!dataContext.Logins.Any())
-            {
-                var login = new Login()
-                {
-                    LastLoginDate = DateTime.UtcNow,
-                    SessionKey = "124567890",
-                    User = dataContext.Users.Where(u => u.Email == "bluejay.test@gmail.com").FirstOrDefault()
-                };
-
-                dataContext.Logins.Add(login);
-                dataContext.SaveChanges();
-            }*/
         }
     }
 }
