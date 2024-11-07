@@ -19,7 +19,7 @@ builder.Services.AddCors(options =>
         });
 });
 
-
+DotNetEnv.Env.Load();
 builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.

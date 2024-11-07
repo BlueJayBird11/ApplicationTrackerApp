@@ -30,6 +30,10 @@ namespace ApplicationTrackerApp.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
         public IActionResult GetUsers([FromQuery] string adminPassword)
         {
+            var secret = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
+            if (adminPassword != secret)
+                return Unauthorized();
+
             var users = _mapper.Map<List<UserDto>>(_userRepository.GetUsers());
 
             if (!ModelState.IsValid)
@@ -41,8 +45,12 @@ namespace ApplicationTrackerApp.Controllers
         [HttpGet("{userId}")]
         [ProducesResponseType(200, Type = typeof(JobType))]
         [ProducesResponseType(400)]
-        public IActionResult GetUser(int userId)
+        public IActionResult GetUser(int userId, [FromQuery] string adminPassword)
         {
+            var secret = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
+            if (adminPassword != secret)
+                return Unauthorized();
+
             if (!_userRepository.UserExists(userId))
                 return NotFound();
 
@@ -150,10 +158,7 @@ namespace ApplicationTrackerApp.Controllers
                 return BadRequest(ModelState);
 
             if (!_userService.ValidateUser(user, password))
-            {
-                ModelState.AddModelError("", "Incorrect Password");
-                return StatusCode(401, ModelState);
-            }
+                return Unauthorized();
 
             string sessionKey = _loginRepository.GenerateNewSessionKey(user.Id);
 

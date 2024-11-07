@@ -28,8 +28,12 @@ namespace ApplicationTrackerApp.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<JobApplication>))]
-        public IActionResult GetJobApplications()
+        public IActionResult GetJobApplications([FromQuery] string adminPassword)
         {
+            var secret = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
+            if (adminPassword != secret)
+                return Unauthorized();
+
             var jobApplications = _mapper.Map<List<JobApplicationDto>>(_jobApplicationRepository.GetJobApplications());
 
             if (!ModelState.IsValid)
